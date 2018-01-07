@@ -1,0 +1,537 @@
+{
+    "id":"/axapi/v3/slb/server/{name}",
+    "type":"object",
+    "node-type":"list",
+    "title":"server",
+    "description":"Server",
+    "properties":{
+        "name":{
+            "type":"string",
+            "format":"string-rlx",
+            "minLength":1,
+            "maxLength":127,
+            "description":"Server Name",
+            "optional":false
+        },
+        "server-ipv6-addr":{
+            "type":"string",
+            "format":"ipv6-address",
+            "modify-not-allowed":1,
+            "description":"IPV6 address",
+            "optional":true
+        },
+        "host":{
+            "type":"string",
+            "format":"ipv4-address",
+            "modify-not-allowed":1,
+            "description":"IP Address",
+            "optional":true
+        },
+        "fqdn-name":{
+            "type":"string",
+            "format":"string",
+            "minLength":1,
+            "maxLength":63,
+            "modify-not-allowed":1,
+            "description":"Server hostname",
+            "optional":true
+        },
+        "action":{
+            "type":"string",
+            "format":"enum",
+            "default":"enable",
+            "description":"'enable': Enable this Real Server; 'disable': Disable this Real Server; 'disable-with-health-check': disable real server, but health check work; ",
+            "enum":[
+                "enable",
+                "disable",
+                "disable-with-health-check"
+            ],
+            "optional":true
+        },
+        "external-ip":{
+            "type":"string",
+            "format":"ipv4-address",
+            "description":"External IP address for NAT of GSLB",
+            "optional":true
+        },
+        "ipv6":{
+            "type":"string",
+            "format":"ipv6-address",
+            "description":"IPv6 address Mapping of GSLB",
+            "optional":true
+        },
+        "template-server":{
+            "type":"string",
+            "format":"string-rlx",
+            "minLength":1,
+            "maxLength":127,
+            "default":"default",
+            "$ref":"/axapi/v3/slb/template/server",
+            "description":"Server template (Server template name)",
+            "optional":true
+        },
+        "health-check":{
+            "type":"string",
+            "format":"string-rlx",
+            "minLength":1,
+            "maxLength":63,
+            "$ref":"/axapi/v3/health/monitor",
+            "not":"health-check-disable",
+            "description":"Health Check Monitor (Health monitor name)",
+            "optional":true
+        },
+        "health-check-disable":{
+            "type":"number",
+            "format":"flag",
+            "default":0,
+            "not":"health-check",
+            "description":"Disable configured health check configuration",
+            "optional":true
+        },
+        "conn-limit":{
+            "type":"number",
+            "format":"number",
+            "minimum":1,
+            "maximum":8000000,
+            "default":8000000,
+            "description":"Connection Limit",
+            "optional":true
+        },
+        "no-logging":{
+            "type":"number",
+            "format":"flag",
+            "default":0,
+            "description":"Do not log connection over limit event",
+            "optional":true
+        },
+        "conn-resume":{
+            "type":"number",
+            "format":"number",
+            "minimum":1,
+            "maximum":1000000,
+            "description":"Connection Resume (Connection Resume (min active conn before resume taking new conn))",
+            "optional":true
+        },
+        "weight":{
+            "type":"number",
+            "format":"number",
+            "minimum":1,
+            "maximum":1000,
+            "default":1,
+            "description":"Weight for this Real Server (Connection Weight)",
+            "optional":true
+        },
+        "slow-start":{
+            "type":"number",
+            "format":"flag",
+            "default":0,
+            "description":"Slowly ramp up the connection number after server is up (start from 128, then double every 10 sec till 4096)",
+            "optional":true
+        },
+        "spoofing-cache":{
+            "type":"number",
+            "format":"flag",
+            "default":0,
+            "description":"This server is a spoofing cache",
+            "optional":true
+        },
+        "stats-data-action":{
+            "type":"string",
+            "format":"enum",
+            "default":"stats-data-enable",
+            "description":"'stats-data-enable': Enable statistical data collection for real server; 'stats-data-disable': Disable statistical data collection for real server; ",
+            "enum":[
+                "stats-data-enable",
+                "stats-data-disable"
+            ],
+            "optional":true
+        },
+        "extended-stats":{
+            "type":"number",
+            "format":"flag",
+            "default":0,
+            "description":"Enable extended statistics on real server",
+            "optional":true
+        },
+        "alternate-server":{
+            "type":"array",
+            "minItems":1,
+            "items":{
+                "type":"object"
+            },
+            "uniqueItems":true,
+            "array":[
+                {
+                    "properties":{
+                        "alternate":{
+                            "type":"number",
+                            "format":"number",
+                            "minimum":1,
+                            "maximum":16,
+                            "description":"Alternate Server (Alternate Server Number)"
+                        },
+                        "alternate-name":{
+                            "type":"string",
+                            "format":"string-rlx",
+                            "minLength":1,
+                            "maxLength":127,
+                            "description":"Alternate Name"
+                        },
+                        "optional":true
+                    }
+                }
+            ]
+        },
+        "uuid":{
+            "type":"string",
+            "format":"string",
+            "minLength":1,
+            "maxLength":64,
+            "modify-not-allowed":1,
+            "description":"uuid of the object",
+            "optional":true
+        },
+        "user-tag":{
+            "type":"string",
+            "format":"string-rlx",
+            "minLength":1,
+            "maxLength":127,
+            "description":"Customized tag",
+            "optional":true
+        },
+        "sampling-enable":{
+            "type":"array",
+            "minItems":1,
+            "items":{
+                "type":"object"
+            },
+            "uniqueItems":true,
+            "array":[
+                {
+                    "properties":{
+                        "counters1":{
+                            "type":"string",
+                            "format":"enum",
+                            "description":"'all': all; 'total-conn': Total established connections; 'fwd-pkt': Forward Packets Processed; 'rev-pkt': Reverse Packets Processed; 'peak-conn': Peak number of established connections; 'total_req': Total Requests processed; 'total_req_succ': Total Requests succeeded; 'curr_ssl_conn': Current SSL connections established; 'total_ssl_conn': Total SSL connections established; 'total_fwd_bytes': Bytes processed in forward direction; 'total_rev_bytes': Bytes processed in reverse direction; 'total_fwd_pkts': Packets processed in forward direction; 'total_rev_pkts': Packets processed in reverse direction; ",
+                            "enum":[
+                                "all",
+                                "total-conn",
+                                "fwd-pkt",
+                                "rev-pkt",
+                                "peak-conn",
+                                "total_req",
+                                "total_req_succ",
+                                "curr_ssl_conn",
+                                "total_ssl_conn",
+                                "total_fwd_bytes",
+                                "total_rev_bytes",
+                                "total_fwd_pkts",
+                                "total_rev_pkts"
+                            ]
+                        },
+                        "optional":true
+                    }
+                }
+            ]
+        },
+        "portlist":{
+            "type":"array",
+            "minItems":1,
+            "items":{
+                "type":"port"
+            },
+            "uniqueItems":true,
+            "$ref":"/axapi/v3/slb/server/{name}/port/{port-number}+{protocol}",
+            "array":[
+                {
+                    "properties":{
+                        "port-number":{
+                            "type":"number",
+                            "format":"number",
+                            "minimum":0,
+                            "maximum":65534,
+                            "description":"Port Number",
+                            "optional":false
+                        },
+                        "protocol":{
+                            "type":"string",
+                            "format":"enum",
+                            "description":"'tcp': TCP Port; 'udp': UDP Port; ",
+                            "enum":[
+                                "tcp",
+                                "udp"
+                            ],
+                            "optional":false
+                        },
+                        "range":{
+                            "type":"number",
+                            "format":"number",
+                            "minimum":0,
+                            "maximum":254,
+                            "default":0,
+                            "description":"Port range (Port range value - used for vip-to-rport-mapping)",
+                            "optional":true
+                        },
+                        "template-port":{
+                            "type":"string",
+                            "format":"string-rlx",
+                            "minLength":1,
+                            "maxLength":127,
+                            "default":"default",
+                            "$ref":"/axapi/v3/slb/template/port",
+                            "description":"Port template (Port template name)",
+                            "optional":true
+                        },
+                        "template-server-ssl":{
+                            "type":"string",
+                            "format":"string-rlx",
+                            "minLength":1,
+                            "maxLength":127,
+                            "$ref":"/axapi/v3/slb/template/server-ssl",
+                            "description":"Server side SSL template (Server side SSL Name)",
+                            "optional":true
+                        },
+                        "action":{
+                            "type":"string",
+                            "format":"enum",
+                            "default":"enable",
+                            "description":"'enable': enable; 'disable': disable; 'disable-with-health-check': disable port, but health check work; ",
+                            "enum":[
+                                "enable",
+                                "disable",
+                                "disable-with-health-check"
+                            ],
+                            "optional":true
+                        },
+                        "no-ssl":{
+                            "type":"number",
+                            "format":"flag",
+                            "default":0,
+                            "description":"No SSL",
+                            "optional":true
+                        },
+                        "health-check":{
+                            "type":"string",
+                            "format":"string-rlx",
+                            "minLength":1,
+                            "maxLength":63,
+                            "$ref":"/axapi/v3/health/monitor",
+                            "not-list":[ "health-check-follow-port", "health-check-disable" ],
+                            "description":"Health Check (Monitor Name)",
+                            "optional":true
+                        },
+                        "health-check-follow-port":{
+                            "type":"number",
+                            "format":"number",
+                            "minimum":1,
+                            "maximum":65534,
+                            "not-list":[ "health-check", "health-check-disable" ],
+                            "description":"Specify which port to follow for health status (Port Number)",
+                            "optional":true
+                        },
+                        "follow-port-protocol":{
+                            "type":"string",
+                            "format":"enum",
+                            "description":"'tcp': TCP Port; 'udp': UDP Port; ",
+                            "enum":[
+                                "tcp",
+                                "udp"
+                            ],
+                            "optional":true
+                        },
+                        "health-check-disable":{
+                            "type":"number",
+                            "format":"flag",
+                            "default":0,
+                            "not-list":[ "health-check", "health-check-follow-port" ],
+                            "description":"Disable health check",
+                            "optional":true
+                        },
+                        "weight":{
+                            "type":"number",
+                            "format":"number",
+                            "minimum":1,
+                            "maximum":1000,
+                            "default":1,
+                            "description":"Port Weight (Connection Weight)",
+                            "optional":true
+                        },
+                        "conn-limit":{
+                            "type":"number",
+                            "format":"number",
+                            "minimum":1,
+                            "maximum":8000000,
+                            "default":8000000,
+                            "description":"Connection Limit",
+                            "optional":true
+                        },
+                        "no-logging":{
+                            "type":"number",
+                            "format":"flag",
+                            "default":0,
+                            "description":"Do not log connection over limit event",
+                            "optional":true
+                        },
+                        "conn-resume":{
+                            "type":"number",
+                            "format":"number",
+                            "minimum":1,
+                            "maximum":1000000,
+                            "description":"Connection Resume",
+                            "optional":true
+                        },
+                        "stats-data-action":{
+                            "type":"string",
+                            "format":"enum",
+                            "default":"stats-data-enable",
+                            "description":"'stats-data-enable': Enable statistical data collection for real server port; 'stats-data-disable': Disable statistical data collection for real server port; ",
+                            "enum":[
+                                "stats-data-enable",
+                                "stats-data-disable"
+                            ],
+                            "optional":true
+                        },
+                        "extended-stats":{
+                            "type":"number",
+                            "format":"flag",
+                            "default":0,
+                            "description":"Enable extended statistics on real server port",
+                            "optional":true
+                        },
+                        "alternate-port":{
+                            "type":"array",
+                            "minItems":1,
+                            "items":{
+                                "type":"object"
+                            },
+                            "uniqueItems":true,
+                            "array":[
+                                {
+                                    "properties":{
+                                        "alternate":{
+                                            "type":"number",
+                                            "format":"number",
+                                            "minimum":1,
+                                            "maximum":16,
+                                            "description":"Alternate Server Number"
+                                        },
+                                        "alternate-name":{
+                                            "type":"string",
+                                            "format":"string-rlx",
+                                            "minLength":1,
+                                            "maxLength":127,
+                                            "description":"Alternate Name"
+                                        },
+                                        "alternate-server-port":{
+                                            "type":"number",
+                                            "format":"number",
+                                            "minimum":1,
+                                            "maximum":65535,
+                                            "description":"Port (Alternate Server Port Value)"
+                                        },
+                                        "optional":true
+                                    }
+                                }
+                            ]
+                        },
+                        "auth-cfg":{
+                            "type":"object",
+                            "properties":{
+                                "service-principal-name":{
+                                    "type":"string",
+                                    "format":"string-rlx",
+                                    "minLength":1,
+                                    "maxLength":128,
+                                    "description":"Service Principal Name (Kerberos principal name)"
+                                }
+                            }
+                        },
+                        "uuid":{
+                            "type":"string",
+                            "format":"string",
+                            "minLength":1,
+                            "maxLength":64,
+                            "modify-not-allowed":1,
+                            "description":"uuid of the object",
+                            "optional":true
+                        },
+                        "user-tag":{
+                            "type":"string",
+                            "format":"string-rlx",
+                            "minLength":1,
+                            "maxLength":127,
+                            "description":"Customized tag",
+                            "optional":true
+                        },
+                        "sampling-enable":{
+                            "type":"array",
+                            "minItems":1,
+                            "items":{
+                                "type":"object"
+                            },
+                            "uniqueItems":true,
+                            "array":[
+                                {
+                                    "properties":{
+                                        "counters1":{
+                                            "type":"string",
+                                            "format":"enum",
+                                            "description":"'all': all; 'curr_req': Current requests; 'total_req': Total Requests; 'total_req_succ': Total requests succ; 'total_fwd_bytes': Bytes processed in forward direction; 'total_fwd_pkts': Packets processed in forward direction; 'total_rev_bytes': Bytes processed in reverse direction; 'total_rev_pkts': Packets processed in reverse direction; 'total_conn': Total connections; 'last_total_conn': Last total connections; 'peak_conn': Peak connections; 'es_resp_200': Response status 200; 'es_resp_300': Response status 300; 'es_resp_400': Response status 400; 'es_resp_500': Response status 500; 'es_resp_other': Response status other; 'es_req_count': Total proxy requests; 'es_resp_count': Total proxy response; 'es_resp_invalid_http': Total non-http response; 'total_rev_pkts_inspected': Total reverse packets inspected; 'total_rev_pkts_inspected_good_status_code': Total reverse packets with good status code inspected; 'response_time': Response time; 'fastest_rsp_time': Fastest response time; 'slowest_rsp_time': Slowest response time; 'curr_ssl_conn': Current SSL connections; 'total_ssl_conn': Total SSL connections; 'resp-count': Total Response Count; 'resp-1xx': Response status 1xx; 'resp-2xx': Response status 2xx; 'resp-3xx': Response status 3xx; 'resp-4xx': Response status 4xx; 'resp-5xx': Response status 5xx; 'resp-other': Response status Other; 'resp-latency': Time to First Response Byte; ",
+                                            "enum":[
+                                                "all",
+                                                "curr_req",
+                                                "total_req",
+                                                "total_req_succ",
+                                                "total_fwd_bytes",
+                                                "total_fwd_pkts",
+                                                "total_rev_bytes",
+                                                "total_rev_pkts",
+                                                "total_conn",
+                                                "last_total_conn",
+                                                "peak_conn",
+                                                "es_resp_200",
+                                                "es_resp_300",
+                                                "es_resp_400",
+                                                "es_resp_500",
+                                                "es_resp_other",
+                                                "es_req_count",
+                                                "es_resp_count",
+                                                "es_resp_invalid_http",
+                                                "total_rev_pkts_inspected",
+                                                "total_rev_pkts_inspected_good_status_code",
+                                                "response_time",
+                                                "fastest_rsp_time",
+                                                "slowest_rsp_time",
+                                                "curr_ssl_conn",
+                                                "total_ssl_conn",
+                                                "resp-count",
+                                                "resp-1xx",
+                                                "resp-2xx",
+                                                "resp-3xx",
+                                                "resp-4xx",
+                                                "resp-5xx",
+                                                "resp-other",
+                                                "resp-latency"
+                                            ]
+                                        },
+                                        "optional":true
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "required":[
+                        "port-number",
+                        "protocol"
+                    ]
+                }
+            ]
+        }
+    },
+    "object-keys":[
+        "name"
+    ],
+    "required":[
+        "name"
+    ]
+}
