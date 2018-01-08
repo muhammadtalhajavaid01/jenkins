@@ -12,7 +12,6 @@ class App extends Component {
     window.alert('You submitted the Configurations... Please check console');
     console.log(values);
   }
-
   render() {
     return(
       <div>
