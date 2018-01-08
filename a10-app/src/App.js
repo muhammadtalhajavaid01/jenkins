@@ -13,8 +13,12 @@ class App extends Component {
     console.log(values);
   }
 
-  render() {
-    return (
+  
+            render()
+
+
+{
+    return      (
       <div>
         <header className='App-header'>
           <img src={logo} className='App-logo' alt='logo' />
